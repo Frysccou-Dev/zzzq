@@ -42,3 +42,33 @@
   --color-custom-yellow-400: #c7aa58;
   --color-custom-yellow-500: #bd9243;
 }
+
+/* CTA Button styles */
+.btn-cta {
+  background: linear-gradient(
+    90deg,
+    var(--color-custom-lilac-400),
+    var(--color-custom-pink-400)
+  );
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.12);
+  backdrop-filter: blur(8px);
+  padding: 0.9rem 1.8rem;
+  font-size: 1.05rem;
+}
+
+.btn-cta:focus {
+  outline: 3px solid rgba(178, 109, 200, 0.22);
+  outline-offset: 3px;
+}
+
+.btn-cta:active {
+  transform: translateY(1px);
+}
+
+/* Placement tweaks for fixed CTA */
+.fixed-cta {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 40;
+}
