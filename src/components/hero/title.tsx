@@ -2,7 +2,7 @@ interface TitleProps {
   className?: string;
 }
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const letterContainer = {
   initial: {},
@@ -33,12 +33,14 @@ function splitToLetters(text: string) {
 }
 
 export default function Title({ className = '' }: TitleProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.h1
       className={`font-extrabold text-white tracking-tight leading-none text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl drop-shadow-2xl ${className}`}
-      variants={letterContainer}
+      variants={shouldReduceMotion ? { initial: {} } : letterContainer}
       initial='initial'
-      whileHover='hover'
+      {...(shouldReduceMotion ? {} : { whileHover: 'hover' })}
     >
       <div>
         <span className='italic font-light'>
