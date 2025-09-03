@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MeshGradient } from '@paper-design/shaders-react';
 
 interface ShaderBackgroundProps {
@@ -11,10 +11,16 @@ interface ShaderBackgroundProps {
 
 export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const handleMouseEnter = () => {};
     const handleMouseLeave = () => {};
+
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReduced(mq.matches);
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener?.('change', onChange);
 
     const container = containerRef.current;
     if (container) {
@@ -27,6 +33,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         container.removeEventListener('mouseenter', handleMouseEnter);
         container.removeEventListener('mouseleave', handleMouseLeave);
       }
+      mq.removeEventListener?.('change', onChange);
     };
   }, []);
 
@@ -71,16 +78,21 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         </defs>
       </svg>
 
-      <MeshGradient
-        className='absolute inset-0 w-full h-full -z-10 pointer-events-none'
-        colors={['#f2d8eb', '#b26dc8', '#65c375', '#688bc9', '#d99090']}
-        speed={0.3}
-      />
-      <MeshGradient
-        className='absolute inset-0 w-full h-full opacity-60 -z-10 pointer-events-none'
-        colors={['#d2be77', '#c6d6ec', '#e2c6ec', '#40a752']}
-        speed={0.2}
-      />
+      {reduced ? (
+        <div
+          className='absolute inset-0 -z-10 pointer-events-none'
+          style={{
+            background:
+              'linear-gradient(120deg, #f2d8eb 0%, #b26dc8 35%, #65c375 65%, #688bc9 100%)',
+          }}
+        />
+      ) : (
+        <MeshGradient
+          className='absolute inset-0 w-full h-full -z-10 pointer-events-none'
+          colors={['#f2d8eb', '#b26dc8', '#65c375', '#688bc9', '#d99090']}
+          speed={0.22}
+        />
+      )}
 
       <div className='relative z-10'>{children}</div>
     </div>
