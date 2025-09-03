@@ -2,20 +2,19 @@
 
 import type React from 'react';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { MeshGradient } from '@paper-design/shaders-react';
 
 interface ShaderBackgroundProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const handleMouseEnter = () => setIsActive(true);
-    const handleMouseLeave = () => setIsActive(false);
+    const handleMouseEnter = () => {};
+    const handleMouseLeave = () => {};
 
     const container = containerRef.current;
     if (container) {
@@ -34,10 +33,9 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   return (
     <div
       ref={containerRef}
-      className='min-h-screen bg-black relative overflow-hidden'
+      className='h-[100dvh] w-full relative overflow-hidden'
     >
-      {/* SVG Filters */}
-      <svg className='absolute inset-0 w-0 h-0'>
+      <svg className='absolute inset-0 w-0 h-0 -z-20 pointer-events-none'>
         <defs>
           <filter
             id='glass-effect'
@@ -50,10 +48,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
             <feDisplacementMap in='SourceGraphic' in2='noise' scale='0.3' />
             <feColorMatrix
               type='matrix'
-              values='1 0 0 0 0.02
-                      0 1 0 0 0.02
-                      0 0 1 0 0.05
-                      0 0 0 0.9 0'
+              values='1 0 0 0 0.02 0 1 0 0 0.02 0 0 1 0 0.05 0 0 0 0.9 0'
               result='tint'
             />
           </filter>
@@ -76,19 +71,17 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         </defs>
       </svg>
 
-      {/* Background Shaders */}
       <MeshGradient
-        className='absolute inset-0 w-full h-full'
+        className='absolute inset-0 w-full h-full -z-10 pointer-events-none'
         colors={['#f2d8eb', '#b26dc8', '#65c375', '#688bc9', '#d99090']}
         speed={0.3}
       />
       <MeshGradient
-        className='absolute inset-0 w-full h-full opacity-60'
+        className='absolute inset-0 w-full h-full opacity-60 -z-10 pointer-events-none'
         colors={['#d2be77', '#c6d6ec', '#e2c6ec', '#40a752']}
         speed={0.2}
       />
 
-      {/* Content */}
       <div className='relative z-10'>{children}</div>
     </div>
   );
