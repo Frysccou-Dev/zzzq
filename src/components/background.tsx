@@ -88,7 +88,8 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         speed={0.2}
       />
 
-      {children}
+      {/* Content */}
+      <div className='relative z-10'>{children}</div>
     </div>
   );
 }
